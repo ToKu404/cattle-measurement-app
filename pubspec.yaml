@@ -1,0 +1,42 @@
+name: cattle_app
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.1 <3.0.0'
+
+dependencies:
+  camera: ^0.10.0+4
+  flutter:
+    sdk: flutter
+  http: ^0.13.5
+  path: ^1.8.2
+  path_provider: ^2.0.11
+  provider: ^6.0.4
+  shared_preferences: ^2.0.15
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+  #   - images/a_dot_ham.jpeg
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+
