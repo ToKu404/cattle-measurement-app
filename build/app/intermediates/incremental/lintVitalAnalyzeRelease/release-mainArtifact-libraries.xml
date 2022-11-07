@@ -1,13 +1,13 @@
 <libraries>
   <library
-      name="__local_aars__:/home/toku/Documents/self_project/cattle_app/build/app/intermediates/flutter/release/libs.jar:unspecified@jar"
-      jars="/home/toku/Documents/self_project/cattle_app/build/app/intermediates/flutter/release/libs.jar"
-      resolved="__local_aars__:/home/toku/Documents/self_project/cattle_app/build/app/intermediates/flutter/release/libs.jar:unspecified"/>
+      name="__local_aars__:/home/toku/Documents/Cattle_Measurement_App/build/app/intermediates/flutter/release/libs.jar:unspecified@jar"
+      jars="/home/toku/Documents/Cattle_Measurement_App/build/app/intermediates/flutter/release/libs.jar"
+      resolved="__local_aars__:/home/toku/Documents/Cattle_Measurement_App/build/app/intermediates/flutter/release/libs.jar:unspecified"/>
   <library
-      name="/home/toku/Documents/self_project/cattle_app/android@@:shared_preferences_android::release"
-      jars="/home/toku/Documents/self_project/cattle_app/build/shared_preferences_android/.transforms/aaf90da3e1ccf0f98303574aa7bd15a7/transformed/out/jars/classes.jar"
+      name="/home/toku/Documents/Cattle_Measurement_App/android@@:shared_preferences_android::release"
+      jars="/home/toku/Documents/Cattle_Measurement_App/build/shared_preferences_android/.transforms/1bf2fcae679a0915103a948ddeee3915/transformed/out/jars/classes.jar"
       resolved="io.flutter.plugins.sharedpreferences:shared_preferences_android:unspecified"
-      folder="/home/toku/Documents/self_project/cattle_app/build/shared_preferences_android/.transforms/aaf90da3e1ccf0f98303574aa7bd15a7/transformed/out"
+      folder="/home/toku/Documents/Cattle_Measurement_App/build/shared_preferences_android/.transforms/1bf2fcae679a0915103a948ddeee3915/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -17,10 +17,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="/home/toku/Documents/self_project/cattle_app/android@@:flutter_plugin_android_lifecycle::release"
-      jars="/home/toku/Documents/self_project/cattle_app/build/flutter_plugin_android_lifecycle/.transforms/65bcae51ef8b7a13644b7dda1b89bef5/transformed/out/jars/classes.jar"
+      name="/home/toku/Documents/Cattle_Measurement_App/android@@:flutter_plugin_android_lifecycle::release"
+      jars="/home/toku/Documents/Cattle_Measurement_App/build/flutter_plugin_android_lifecycle/.transforms/04b270854cd690bef6ec920b7441e1d1/transformed/out/jars/classes.jar"
       resolved="io.flutter.plugins.flutter_plugin_android_lifecycle:flutter_plugin_android_lifecycle:unspecified"
-      folder="/home/toku/Documents/self_project/cattle_app/build/flutter_plugin_android_lifecycle/.transforms/65bcae51ef8b7a13644b7dda1b89bef5/transformed/out"
+      folder="/home/toku/Documents/Cattle_Measurement_App/build/flutter_plugin_android_lifecycle/.transforms/04b270854cd690bef6ec920b7441e1d1/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -30,10 +30,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="/home/toku/Documents/self_project/cattle_app/android@@:camera_android::release"
-      jars="/home/toku/Documents/self_project/cattle_app/build/camera_android/.transforms/e2c3669312676ff3e59593ecfe5f9323/transformed/out/jars/classes.jar"
+      name="/home/toku/Documents/Cattle_Measurement_App/android@@:camera_android::release"
+      jars="/home/toku/Documents/Cattle_Measurement_App/build/camera_android/.transforms/0e2d9d822b2b08a6b8c6c5b1145c7d43/transformed/out/jars/classes.jar"
       resolved="io.flutter.plugins.camera:camera_android:unspecified"
-      folder="/home/toku/Documents/self_project/cattle_app/build/camera_android/.transforms/e2c3669312676ff3e59593ecfe5f9323/transformed/out"
+      folder="/home/toku/Documents/Cattle_Measurement_App/build/camera_android/.transforms/0e2d9d822b2b08a6b8c6c5b1145c7d43/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"
@@ -43,10 +43,10 @@
       externalAnnotations="annotations.zip"
       proguardRules="proguard.txt"/>
   <library
-      name="/home/toku/Documents/self_project/cattle_app/android@@:path_provider_android::release"
-      jars="/home/toku/Documents/self_project/cattle_app/build/path_provider_android/.transforms/5ed66a1419e0f16dfcb96e319b07c6ec/transformed/out/jars/classes.jar"
+      name="/home/toku/Documents/Cattle_Measurement_App/android@@:path_provider_android::release"
+      jars="/home/toku/Documents/Cattle_Measurement_App/build/path_provider_android/.transforms/fdcaa2cdcabea9d029964f5ce03e4012/transformed/out/jars/classes.jar"
       resolved="io.flutter.plugins.pathprovider:path_provider_android:unspecified"
-      folder="/home/toku/Documents/self_project/cattle_app/build/path_provider_android/.transforms/5ed66a1419e0f16dfcb96e319b07c6ec/transformed/out"
+      folder="/home/toku/Documents/Cattle_Measurement_App/build/path_provider_android/.transforms/fdcaa2cdcabea9d029964f5ce03e4012/transformed/out"
       manifest="AndroidManifest.xml"
       resFolder="res"
       assetsFolder="assets"

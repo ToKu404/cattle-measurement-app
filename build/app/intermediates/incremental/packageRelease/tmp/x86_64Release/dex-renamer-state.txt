@@ -1,4 +1,4 @@
-#Thu Nov 03 16:14:03 WITA 2022
-base.0=/home/toku/Documents/self_project/cattle_app/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+#Sat Nov 05 08:04:05 WITA 2022
+base.0=/home/toku/Documents/Cattle_Measurement_App/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

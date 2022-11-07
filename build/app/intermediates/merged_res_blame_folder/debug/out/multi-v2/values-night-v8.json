@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "/home/toku/Documents/self_project/cattle_app/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
+            "outputFile": "/home/toku/Documents/Cattle_Measurement_App/build/app/intermediates/incremental/mergeDebugResources/merged.dir/values-night-v8/values-night-v8.xml",
             "map": [
                 {
-                    "source": "/home/toku/Documents/self_project/cattle_app/android/app/src/main/res/values-night/styles.xml",
+                    "source": "/home/toku/Documents/Cattle_Measurement_App/android/app/src/main/res/values-night/styles.xml",
                     "from": {
                         "startLines": "3,14",
                         "startColumns": "4,4",

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "/home/toku/Documents/self_project/cattle_app/build/app/intermediates/incremental/mergeReleaseResources/merged.dir/values-lv/values-lv.xml",
+            "outputFile": "/home/toku/Documents/Cattle_Measurement_App/build/app/intermediates/incremental/mergeReleaseResources/merged.dir/values-lv/values-lv.xml",
             "map": [
                 {
                     "source": "/home/toku/.gradle/caches/transforms-3/acbce933e4b464a5224ed377a62db1f5/transformed/core-1.6.0/res/values-lv/values-lv.xml",

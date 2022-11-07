@@ -56,7 +56,7 @@ class _LoginSimkeuPageState extends State<LoginSimkeuPage> {
                           ),
                           children: [
                             TextSpan(
-                              text: ' Simkeu',
+                              text: ' Data Pelatihan',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 24,

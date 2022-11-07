@@ -41,7 +41,7 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
 
       imageLength.text = data.panjang;
       imageWidth.text = data.lebar;
-      objectDistance.text = data.panjang;
+      objectDistance.text = data.jarak;
       objectRealLength.text = data.panjangMeter;
       objectImageLength.text = data.panjangPixel;
     }
