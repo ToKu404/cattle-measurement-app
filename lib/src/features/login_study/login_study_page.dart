@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:cattle_app/core/constants/color_const.dart';
 import 'package:cattle_app/core/routes/app_routes.dart';
+import 'package:cattle_app/src/models/response_study.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-enum LoginState {
+enum LoginStudyState {
   init,
   loading,
   success,
@@ -20,7 +24,8 @@ class LoginSimkeuPage extends StatefulWidget {
 class _LoginSimkeuPageState extends State<LoginSimkeuPage> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final ValueNotifier<LoginState> loginState = ValueNotifier(LoginState.init);
+  final ValueNotifier<LoginStudyState> loginState =
+      ValueNotifier(LoginStudyState.init);
 
   @override
   void dispose() {
@@ -32,14 +37,14 @@ class _LoginSimkeuPageState extends State<LoginSimkeuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ValueListenableBuilder<LoginState>(
+      body: ValueListenableBuilder<LoginStudyState>(
           valueListenable: loginState,
           builder: (context, state, _) {
-            if (state == LoginState.loading) {
+            if (state == LoginStudyState.loading) {
               return Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (state == LoginState.init) {
+            } else if (state == LoginStudyState.init) {
               return Center(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(horizontal: 16),
@@ -122,7 +127,7 @@ class _LoginSimkeuPageState extends State<LoginSimkeuPage> {
                                 final password = passwordController.text;
                                 if (username.isNotEmpty &&
                                     password.isNotEmpty) {
-                                  loginState.value = LoginState.loading;
+                                  loginState.value = LoginStudyState.loading;
                                   await doLogin(username, password);
                                 } else {
                                   const snackBar = SnackBar(
@@ -182,6 +187,40 @@ class _LoginSimkeuPageState extends State<LoginSimkeuPage> {
     );
   }
 
+  Future<bool?> errorLogin2(String message) {
+    return Alert(
+      context: context,
+      closeFunction: () {
+        loginState.value = LoginStudyState.init;
+        Navigator.pop(context);
+      },
+      type: AlertType.error,
+      title: "Login Gagal",
+      style: AlertStyle(
+          titleStyle: TextStyle(
+              fontSize: 18,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+              height: 1),
+          descStyle: TextStyle(fontSize: 14, color: Palette.gray3, height: 1)),
+      desc: message,
+      buttons: [
+        DialogButton(
+          color: Palette.primary,
+          child: Text(
+            "Kembali",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          onPressed: () {
+            loginState.value = LoginStudyState.init;
+            Navigator.pop(context);
+          },
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+
   Future<void> doLogin(username, password) async {
     try {
       final uri = Uri.parse('http://simkeu.unhas.ac.id:8095/loginapi');
@@ -192,14 +231,22 @@ class _LoginSimkeuPageState extends State<LoginSimkeuPage> {
       final response = await http.Response.fromStream(streamedResponse);
 
       if (response.statusCode == 200) {
-        loginState.value = LoginState.success;
-        Navigator.pushReplacementNamed(context, AppRoute.cattleWeight);
+        final responseBody = ResponseStudy.fromJson(jsonDecode(response.body));
+        if (responseBody.responseCode == 1) {
+          loginState.value = LoginStudyState.success;
+          Navigator.pushReplacementNamed(context, AppRoute.cattleWeight);
+        } else {
+          loginState.value = LoginStudyState.error;
+
+          throw Exception('Email dan Password Salah');
+        }
       } else {
-        loginState.value = LoginState.error;
-        throw Exception('Faild to send request');
+        loginState.value = LoginStudyState.error;
+        throw Exception('Failed to send request');
       }
     } catch (e) {
-      loginState.value = LoginState.error;
+      errorLogin2(e.toString().substring(10));
+      loginState.value = LoginStudyState.error;
     }
   }
 }

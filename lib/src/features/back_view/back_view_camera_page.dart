@@ -5,6 +5,7 @@ import 'package:cattle_app/src/features/back_view/back_view_preview_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/color_const.dart';
+import '../../services/tilt.dart';
 
 class BackViewCameraPage extends StatefulWidget {
   final CameraDescription cameraDescription;
@@ -17,6 +18,8 @@ class BackViewCameraPage extends StatefulWidget {
 class _BackViewCameraPageState extends State<BackViewCameraPage> {
   late CameraController _controller;
   late Future<void> _initializedController;
+  String degree = '0';
+  ValueNotifier<int> height = ValueNotifier(100);
 
   @override
   void initState() {
@@ -65,6 +68,28 @@ class _BackViewCameraPageState extends State<BackViewCameraPage> {
                                     width: 1, color: Colors.white))),
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width *
+                            1.5 /
+                            _controller.value.aspectRatio,
+                        height: MediaQuery.of(context).size.width *
+                            1.5 /
+                            _controller.value.aspectRatio,
+                        child: Align(
+                          alignment: Alignment.bottomCenter,
+                          child: Container(
+                            width: 100,
+                            height: 3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     ColorFiltered(
                       colorFilter: const ColorFilter.mode(
                           Colors.black54, BlendMode.srcOut),
@@ -89,6 +114,73 @@ class _BackViewCameraPageState extends State<BackViewCameraPage> {
                               ),
                             ),
                           ),
+                          Positioned(
+                            left: 10,
+                            bottom: 10,
+                            child: ValueListenableBuilder(
+                              valueListenable: height,
+                              builder: (context, val, _) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Palette.gray4.withOpacity(.6),
+                                    borderRadius: BorderRadius.circular(
+                                      24.0,
+                                    ),
+                                  ),
+                                  child: Slider(
+                                    min: 0,
+                                    max: 200,
+                                    divisions: 40,
+                                    thumbColor: Palette.primary,
+                                    inactiveColor: Palette.gray2,
+                                    label: '${height.value} cm',
+                                    activeColor: Palette.secondary,
+                                    value: val.toDouble(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        height.value = value.toInt();
+                                      });
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          Positioned(
+                            right: 10,
+                            bottom: 10,
+                            child: StreamBuilder<Tilt>(
+                              stream: DeviceTilt(
+                                samplingRateMs: 20,
+                                initialTilt: const Tilt(0, 0),
+                                filterGain: 0.1,
+                              ).stream,
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData && snapshot.data != null) {
+                                  degree =
+                                      '${snapshot.data!.xDegrees.round().toString()}°';
+                                }
+                                return Container(
+                                  width: 60,
+                                  height: 60,
+                                  padding: EdgeInsets.all(4.0),
+                                  decoration: BoxDecoration(
+                                    color: Palette.primary,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      degree,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
                         ],
                       ),
                     ),

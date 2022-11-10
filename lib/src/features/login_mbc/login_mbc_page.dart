@@ -1,7 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:convert';
+
 import 'package:cattle_app/core/constants/color_const.dart';
 import 'package:cattle_app/core/routes/app_routes.dart';
+import 'package:cattle_app/src/models/response_mbc.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 enum LoginState {
   init,
@@ -182,6 +188,40 @@ class _LoginMbcPageState extends State<LoginMbcPage> {
     );
   }
 
+  Future<bool?> errorLogin(String message) {
+    return Alert(
+      context: context,
+      closeFunction: () {
+        loginState.value = LoginState.init;
+        Navigator.pop(context);
+      },
+      type: AlertType.error,
+      title: "Login Gagal",
+      style: AlertStyle(
+          titleStyle: TextStyle(
+              fontSize: 18,
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+              height: 1),
+          descStyle: TextStyle(fontSize: 14, color: Palette.gray3, height: 1)),
+      desc: message,
+      buttons: [
+        DialogButton(
+          color: Palette.primary,
+          child: Text(
+            "Kembali",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          onPressed: () {
+            loginState.value = LoginState.init;
+            Navigator.pop(context);
+          },
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+
   Future<void> doLogin(username, password) async {
     try {
       final uri = Uri.parse('https://maiwabreedingcenter.com/api/login');
@@ -190,18 +230,27 @@ class _LoginMbcPageState extends State<LoginMbcPage> {
         ..fields['password'] = password;
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
       if (response.statusCode == 201) {
-        loginState.value = LoginState.success;
-        Navigator.pushReplacementNamed(
-          context,
-          AppRoute.cattleId,
-        );
+        final responseBody = ResponseMbc.fromJson(jsonDecode(response.body));
+
+        if (responseBody.responseCode == '1') {
+          loginState.value = LoginState.success;
+          Navigator.pushReplacementNamed(
+            context,
+            AppRoute.cattleId,
+          );
+        } else {
+          loginState.value = LoginState.error;
+
+          throw Exception(responseBody.responseMsg);
+        }
       } else {
         loginState.value = LoginState.error;
-        throw Exception('Faild to send request');
+
+        throw Exception('Failed to send request');
       }
     } catch (e) {
+      errorLogin(e.toString().substring(10));
       loginState.value = LoginState.error;
     }
   }

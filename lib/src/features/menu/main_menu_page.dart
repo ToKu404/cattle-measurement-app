@@ -10,14 +10,26 @@ import 'package:cattle_app/src/repositories/menu_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainMenuPage extends StatelessWidget {
+class MainMenuPage extends StatefulWidget {
   const MainMenuPage({super.key});
+
+  @override
+  State<MainMenuPage> createState() => _MainMenuPageState();
+}
+
+class _MainMenuPageState extends State<MainMenuPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final prov2 = context.read<DataHandler>();
+    prov2.init();
+  }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<MenuHandler>();
     final prov2 = context.read<DataHandler>();
-    prov2.init();
 
     void setConfigurationTemp(ConfigurationEntity data) {
       prov2.setJarakKamera(data.jarak);
@@ -67,6 +79,7 @@ class MainMenuPage extends StatelessWidget {
                       icon: Icons.dataset,
                       onTap: () async {
                         final data = await provider.getConfigurationData();
+
                         setConfigurationTemp(data);
                         if (data.jarak.isNotEmpty) {
                           provider.setMenuId(2);
@@ -79,7 +92,7 @@ class MainMenuPage extends StatelessWidget {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         }
                       },
-                      title: 'Datanse Sapi',
+                      title: 'Database Sapi',
                       subtitle: 'Pengukuran dari database sapi',
                     ),
                     const SizedBox(

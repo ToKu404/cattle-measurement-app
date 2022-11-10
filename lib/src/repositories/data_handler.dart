@@ -59,4 +59,24 @@ class DataHandler with ChangeNotifier {
     _resultEntity.beratSapi = berat;
     notifyListeners();
   }
+
+  void setTinggiKameraSamping(String tinggi) {
+    _resultEntity.tinggiKameraSamping = tinggi;
+    notifyListeners();
+  }
+
+  void setDerajatKameraSamping(String derajat) {
+    _resultEntity.derajatKameraSamping = derajat;
+    notifyListeners();
+  }
+
+  void setTinggiKameraBelakang(String tinggi) {
+    _resultEntity.tinggiKameraBelakang = tinggi;
+    notifyListeners();
+  }
+
+  void setDerajatKameraBelakang(String derajat) {
+    _resultEntity.derajatKameraBelakang = derajat;
+    notifyListeners();
+  }
 }

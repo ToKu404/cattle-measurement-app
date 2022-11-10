@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cattle_app/src/models/response_image.dart';
 import 'package:cattle_app/src/repositories/data_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -71,14 +72,7 @@ class _ResultPageState extends State<ResultPage> {
                               children: [
                                 buildConfigurationCard(
                                   title: 'Prediksi Berat',
-                                  data: '${snapshot.data!.beratBadan} Kg',
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                buildConfigurationCard(
-                                  title: 'Prediksi Tinggi',
-                                  data: '${snapshot.data!.tinggi} cm',
+                                  data: '${snapshot.data!.beratBadan}',
                                 ),
                               ]),
                           const SizedBox(
@@ -90,14 +84,14 @@ class _ResultPageState extends State<ResultPage> {
                               children: [
                                 buildConfigurationCard(
                                   title: 'Prediksi Lingkar Badan',
-                                  data: '${snapshot.data!.lingkarBadan} cm',
+                                  data: '${snapshot.data!.lingkarBadan}',
                                 ),
                                 const SizedBox(
                                   width: 8,
                                 ),
                                 buildConfigurationCard(
                                   title: 'Prediksi Panjang',
-                                  data: '${snapshot.data!.panjang} cm',
+                                  data: '${snapshot.data!.panjang}',
                                 ),
                               ]),
                         ],
@@ -134,9 +128,47 @@ class _ResultPageState extends State<ResultPage> {
             }
           } else if (snapshot.hasError) {
             return Center(
-              child: Text(
-                '${snapshot.error}',
-                style: const TextStyle(color: Colors.red),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 24),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.white),
+                    width: MediaQuery.of(context).size.width,
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          snapshot.error.toString().substring(10),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 12,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.popUntil(
+                              context,
+                              (route) => route.isFirst,
+                            );
+                          },
+                          child: Text(
+                            'Kembali Ke Menu Utama',
+                            style: TextStyle(
+                              color: Palette.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           }
@@ -188,28 +220,38 @@ class _ResultPageState extends State<ResultPage> {
   }
 
   Future<ResultResponse> post() async {
-    final provider = context.read<DataHandler>();
-    print(provider.resultEntity.idFotoBelakang);
-    final uri = Uri.parse('${WebService.baseUrl}/hitungberat');
-    final request = http.MultipartRequest('POST', uri)
-      ..fields['kode'] = WebService.code
-      ..fields['idfotosamping'] = provider.resultEntity.idFotoSamping
-      ..fields['jaraksamping'] = provider.resultEntity.jarakSamping
-      ..fields['idfotobelakang'] = provider.resultEntity.idFotoBelakang
-      ..fields['jarakbelakang'] = provider.resultEntity.jarakBelakang
-      ..fields['idsapi'] = provider.resultEntity.idSapi
-      ..fields['panjanggambar'] = provider.resultEntity.panjangGambar
-      ..fields['jarakkamera'] = provider.resultEntity.jarakKamera
-      ..fields['panjangmeter'] = provider.resultEntity.panjangMeter
-      ..fields['panjangpixel'] = provider.resultEntity.panjangPixel
-      ..fields['beratsapi'] = provider.resultEntity.beratSapi;
-    final streamedResponse = await request.send();
-    final response = await http.Response.fromStream(streamedResponse);
+    try {
+      final provider = context.read<DataHandler>();
 
-    if (response.statusCode == 200) {
-      return ResultResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('${response.reasonPhrase}');
+      final uri = Uri.parse('${WebService.baseUrl}/hitungberat');
+      final request = http.MultipartRequest('POST', uri)
+        ..fields['kode'] = WebService.code
+        ..fields['idfotosamping'] = provider.resultEntity.idFotoSamping
+        ..fields['jaraksamping'] = provider.resultEntity.jarakSamping
+        ..fields['idfotobelakang'] = provider.resultEntity.idFotoBelakang
+        ..fields['jarakbelakang'] = provider.resultEntity.jarakBelakang
+        ..fields['idsapi'] = provider.resultEntity.idSapi
+        ..fields['panjanggambar'] = provider.resultEntity.panjangGambar
+        ..fields['jarakkamera'] = provider.resultEntity.jarakKamera
+        ..fields['panjangmeter'] = provider.resultEntity.panjangMeter
+        ..fields['panjangpixel'] = provider.resultEntity.panjangPixel
+        ..fields['beratsapi'] = provider.resultEntity.beratSapi;
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        final responseBody = ResponseImage.fromJson(jsonDecode(response.body));
+
+        if (responseBody.responseCode == 1) {
+          return ResultResponse.fromJson(jsonDecode(response.body));
+        } else {
+          throw Exception('Terdapat Masalah pada Hasil Prediksi');
+        }
+      } else {
+        throw Exception('Terdapat Masalah pada Hasil Prediksi');
+      }
+    } catch (e) {
+      throw Exception('Terdapat Masalah');
     }
   }
 }

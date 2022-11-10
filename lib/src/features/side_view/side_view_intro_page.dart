@@ -1,8 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:cattle_app/src/features/side_view/side_view_camera_page.dart';
-import 'package:cattle_app/src/repositories/data_handler.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../../core/constants/color_const.dart';
 
@@ -76,7 +74,43 @@ class _SideViewIntroPageState extends State<SideViewIntroPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 100,
+                          height: 18,
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 14,
+                          ),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: Colors.white),
+                          child: Column(
+                            children: [
+                              Image.asset(
+                                'assets/images/samping.png',
+                                height: 250,
+                                width: 250,
+                                fit: BoxFit.cover,
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                'Foto dinyatakan valid jika terdapat garis seperti gambar',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 16,
+                                  height: 1,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 18,
                         ),
                         ElevatedButton(
                           onPressed: () {

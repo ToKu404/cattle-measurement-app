@@ -68,11 +68,50 @@ class _BackViewIntroPageState extends State<BackViewIntroPage> {
                               ),
                             ),
                             SizedBox(
-                              height: 100,
+                              height: 18,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8),
+                              width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Stack(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/belakang.png',
+                                    height: 250,
+                                    width: 250,
+                                  ),
+                                  Positioned.fill(
+                                      right: 0,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: SizedBox(),
+                                          ),
+                                          Expanded(
+                                            child: Text(
+                                              'Foto dinyatakan valid jika terdapat garis seperti gambar',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 16,
+                                                height: 1,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ))
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 18,
                             ),
                             ElevatedButton(
                               onPressed: () {
-                              
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
