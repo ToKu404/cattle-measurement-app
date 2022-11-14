@@ -15,8 +15,10 @@ import '../../repositories/data_handler.dart';
 
 class BackViewPreviewPage extends StatefulWidget {
   final String imagePath;
+  final int distance;
 
-  const BackViewPreviewPage({super.key, required this.imagePath});
+  const BackViewPreviewPage(
+      {super.key, required this.imagePath, required this.distance});
 
   @override
   State<BackViewPreviewPage> createState() => _BackViewPreviewPageState();
@@ -30,6 +32,7 @@ class _BackViewPreviewPageState extends State<BackViewPreviewPage> {
   void initState() {
     super.initState();
     _future = post();
+    controller.text = (widget.distance / 100).toString();
   }
 
   @override

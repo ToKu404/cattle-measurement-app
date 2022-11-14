@@ -14,8 +14,10 @@ import '../../models/siluet_response.dart';
 
 class SideViewPreviewPage extends StatefulWidget {
   final String imagePath;
+  final int distance;
 
-  const SideViewPreviewPage({super.key, required this.imagePath});
+  const SideViewPreviewPage(
+      {super.key, required this.imagePath, required this.distance});
 
   @override
   State<SideViewPreviewPage> createState() => _SideViewPreviewPageState();
@@ -29,6 +31,7 @@ class _SideViewPreviewPageState extends State<SideViewPreviewPage> {
   void initState() {
     super.initState();
     _future = post();
+    controller.text = (widget.distance / 100).toString();
   }
 
   @override
@@ -79,7 +82,7 @@ class _SideViewPreviewPageState extends State<SideViewPreviewPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              'Input Jarak Samping (m)',
+                              'Jarak Samping (m)',
                               style: TextStyle(
                                 fontSize: 16,
                               ),

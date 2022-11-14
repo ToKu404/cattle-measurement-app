@@ -1,9 +1,7 @@
-import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:cattle_app/src/features/back_view/back_view_preview_page.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:math';
 import '../../../core/constants/color_const.dart';
 import '../../services/tilt.dart';
 
@@ -19,7 +17,9 @@ class _BackViewCameraPageState extends State<BackViewCameraPage> {
   late CameraController _controller;
   late Future<void> _initializedController;
   String degree = '0';
+  double res = 0;
   ValueNotifier<int> height = ValueNotifier(100);
+  ValueNotifier<bool> isHeightShow = ValueNotifier(false);
 
   @override
   void initState() {
@@ -46,147 +46,209 @@ class _BackViewCameraPageState extends State<BackViewCameraPage> {
           future: _initializedController,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return AspectRatio(
-                aspectRatio: 1 / _controller.value.aspectRatio,
-                child: Stack(
-                  children: [
-                    _controller.buildPreview(),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width *
-                            1.5 /
-                            _controller.value.aspectRatio,
-                        height: MediaQuery.of(context).size.width *
-                            1.5 /
-                            _controller.value.aspectRatio,
-                        decoration: ShapeDecoration(
-                            color: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                                side: const BorderSide(
-                                    width: 1, color: Colors.white))),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width *
-                            1.5 /
-                            _controller.value.aspectRatio,
-                        height: MediaQuery.of(context).size.width *
-                            1.5 /
-                            _controller.value.aspectRatio,
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            width: 100,
-                            height: 3,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.red,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    ColorFiltered(
-                      colorFilter: const ColorFilter.mode(
-                          Colors.black54, BlendMode.srcOut),
+              return ValueListenableBuilder(
+                  valueListenable: height,
+                  builder: (context, valHeight, _) {
+                    return AspectRatio(
+                      aspectRatio: 1 / _controller.value.aspectRatio,
                       child: Stack(
                         children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                              color: Colors.transparent,
+                          _controller.buildPreview(),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width *
+                                  1.5 /
+                                  _controller.value.aspectRatio,
+                              height: MediaQuery.of(context).size.width *
+                                  1.5 /
+                                  _controller.value.aspectRatio,
+                              decoration: ShapeDecoration(
+                                  color: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      side: const BorderSide(
+                                          width: 1, color: Colors.white))),
                             ),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width *
-                                    1.5 /
-                                    _controller.value.aspectRatio,
-                                height: MediaQuery.of(context).size.width *
-                                    1.5 /
-                                    _controller.value.aspectRatio,
-                                decoration: BoxDecoration(
-                                    color: Colors.black,
-                                    borderRadius: BorderRadius.circular(8.0)),
-                              ),
+                          ),
+                          Align(
+                            alignment: Alignment.center,
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width *
+                                      1.5 /
+                                      _controller.value.aspectRatio,
+                                  height: MediaQuery.of(context).size.width *
+                                      1.5 /
+                                      _controller.value.aspectRatio,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      width: 100,
+                                      height: 3,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 4,
+                                  left: 4,
+                                  child: StreamBuilder<Tilt>(
+                                    stream: DeviceTilt(
+                                      samplingRateMs: 20,
+                                      initialTilt: const Tilt(0, 0),
+                                      filterGain: 0.1,
+                                    ).stream,
+                                    builder: (context, snapshot) {
+                                      String der = '';
+                                      int degre = 0;
+                                      if (snapshot.hasData &&
+                                          snapshot.data != null) {
+                                        res = (valHeight /
+                                            cos(snapshot.data!.xRadian));
+                                        der = snapshot.data!.xDegrees
+                                            .round()
+                                            .toString();
+
+                                        if (der.isNotEmpty) {
+                                          degre = int.parse(der);
+                                        }
+
+                                        degree = '${res.round().toString()} cm';
+                                      }
+                                      return degre < 90
+                                          ? Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color:
+                                                    Palette.primary.withOpacity(
+                                                  .7,
+                                                ),
+                                              ),
+                                              child: Text(
+                                                degree,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            )
+                                          : SizedBox.shrink();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          ColorFiltered(
+                            colorFilter: const ColorFilter.mode(
+                                Colors.black54, BlendMode.srcOut),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          1.5 /
+                                          _controller.value.aspectRatio,
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              1.5 /
+                                              _controller.value.aspectRatio,
+                                      decoration: BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius:
+                                              BorderRadius.circular(8.0)),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Positioned(
                             left: 10,
                             bottom: 10,
                             child: ValueListenableBuilder(
-                              valueListenable: height,
-                              builder: (context, val, _) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    color: Palette.gray4.withOpacity(.6),
-                                    borderRadius: BorderRadius.circular(
-                                      24.0,
+                              valueListenable: isHeightShow,
+                              builder: (context, isShow, _) {
+                                return Column(
+                                  children: [
+                                    if (isShow)
+                                      RotatedBox(
+                                        quarterTurns: -1,
+                                        child: AnimatedContainer(
+                                          duration: Duration(
+                                            seconds: 1,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(12),
+                                              bottomRight: Radius.circular(12),
+                                            ),
+                                            border: Border.all(
+                                                width: 1, color: Palette.gray1),
+                                          ),
+                                          child: Slider(
+                                            min: 0,
+                                            max: 200,
+                                            divisions: 40,
+                                            thumbColor: Palette.primary,
+                                            inactiveColor: Palette.gray2,
+                                            activeColor: Palette.secondary,
+                                            value: valHeight.toDouble(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                height.value = value.toInt();
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    InkWell(
+                                      onTap: () => isHeightShow.value = !isShow,
+                                      child: Container(
+                                        padding: const EdgeInsets.all(
+                                          12,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black.withOpacity(.85),
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                          border: Border.all(
+                                              width: 1, color: Palette.gray1),
+                                        ),
+                                        child: Text(
+                                          '${(height.value / 100).toStringAsFixed(1)} m',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  child: Slider(
-                                    min: 0,
-                                    max: 200,
-                                    divisions: 40,
-                                    thumbColor: Palette.primary,
-                                    inactiveColor: Palette.gray2,
-                                    label: '${height.value} cm',
-                                    activeColor: Palette.secondary,
-                                    value: val.toDouble(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        height.value = value.toInt();
-                                      });
-                                    },
-                                  ),
+                                  ],
                                 );
                               },
                             ),
                           ),
-                          Positioned(
-                            right: 10,
-                            bottom: 10,
-                            child: StreamBuilder<Tilt>(
-                              stream: DeviceTilt(
-                                samplingRateMs: 20,
-                                initialTilt: const Tilt(0, 0),
-                                filterGain: 0.1,
-                              ).stream,
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData && snapshot.data != null) {
-                                  degree =
-                                      '${snapshot.data!.xDegrees.round().toString()}°';
-                                }
-                                return Container(
-                                  width: 60,
-                                  height: 60,
-                                  padding: EdgeInsets.all(4.0),
-                                  decoration: BoxDecoration(
-                                    color: Palette.primary,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      degree,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          )
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              );
+                    );
+                  });
             }
             return const Center(
               child: CircularProgressIndicator(
@@ -207,12 +269,14 @@ class _BackViewCameraPageState extends State<BackViewCameraPage> {
               }
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      BackViewPreviewPage(imagePath: image.path),
+                  builder: (context) => BackViewPreviewPage(
+                    imagePath: image.path,
+                    distance: res.round(),
+                  ),
                 ),
               );
             } catch (e) {
-              log(e.toString());
+              debugPrint(e.toString());
             }
           },
           backgroundColor: Palette.secondary,

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:cattle_app/src/features/side_view/side_view_preview_page.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +19,8 @@ class SideViewCameraPage extends StatefulWidget {
 class _SideViewCameraPageState extends State<SideViewCameraPage> {
   late CameraController _controller;
   late Future<void> _initializedController;
+  double res = 0;
+
   String degree = '0';
   ValueNotifier<int> height = ValueNotifier(100);
   ValueNotifier<bool> isHeightShow = ValueNotifier(false);
@@ -78,7 +79,6 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
                                   ),
                                 ),
                               ),
-
                               Align(
                                 alignment: Alignment.center,
                                 child: Stack(
@@ -91,18 +91,18 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
                                           MediaQuery.of(context).size.width *
                                               1.5 /
                                               _controller.value.aspectRatio,
-                                      // child: Align(
-                                      //   alignment: Alignment.center,
-                                      //   child: Container(
-                                      //     width: 100,
-                                      //     height: 3,
-                                      //     decoration: BoxDecoration(
-                                      //       borderRadius:
-                                      //           BorderRadius.circular(4),
-                                      //       color: Colors.red,
-                                      //     ),
-                                      //   ),
-                                      // ),
+                                      child: Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          width: 100,
+                                          height: 3,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                     Positioned(
                                       top: 4,
@@ -114,8 +114,8 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
                                           filterGain: 0.1,
                                         ).stream,
                                         builder: (context, snapshot) {
-                                          double res = 0;
                                           String der = '';
+                                          int degre = 0;
                                           if (snapshot.hasData &&
                                               snapshot.data != null) {
                                             res = (valHeight /
@@ -124,10 +124,14 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
                                                 .round()
                                                 .toString();
 
+                                            if (der.isNotEmpty) {
+                                              degre = int.parse(der);
+                                            }
+
                                             degree =
                                                 '${res.round().toString()} cm';
                                           }
-                                          return int.parse(der) < 90
+                                          return degre < 90
                                               ? Container(
                                                   padding: const EdgeInsets
                                                       .symmetric(horizontal: 4),
@@ -152,10 +156,10 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
                                         },
                                       ),
                                     ),
+                                 
                                   ],
                                 ),
                               ),
-
                               ColorFiltered(
                                 colorFilter: const ColorFilter.mode(
                                     Colors.black54, BlendMode.srcOut),
@@ -266,76 +270,42 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
                                       );
                                     }),
                               ),
-                              // Positioned(
-                              //   right: 10,
-                              //   bottom: 10,
-                              //   child: StreamBuilder<Tilt>(
-                              //     stream: DeviceTilt(
-                              //       samplingRateMs: 20,
-                              //       initialTilt: const Tilt(0, 0),
-                              //       filterGain: 0.1,
-                              //     ).stream,
-                              //     builder: (context, snapshot) {
-                              //       if (snapshot.hasData && snapshot.data != null) {
-                              //         degree =
-                              //             '${snapshot.data!.xDegrees.round().toString()}°';
-                              //       }
-                              //       return Container(
-                              //         width: 60,
-                              //         height: 60,
-                              //         padding: const EdgeInsets.all(4.0),
-                              //         decoration: const BoxDecoration(
-                              //           color: Palette.primary,
-                              //           shape: BoxShape.circle,
-                              //         ),
-                              //         child: Center(
-                              //           child: Text(
-                              //             degree,
-                              //             style: const TextStyle(
-                              //               color: Colors.white,
-                              //               fontSize: 18,
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       );
-                              //     },
-                              //   ),
-                              // )
+                            
                             ],
                           ),
                         ),
-                        Container(
-                          height: MediaQuery.of(context).size.height,
-                          width: MediaQuery.of(context).size.width,
-                          child: Center(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width *
-                                  1.5 /
-                                  _controller.value.aspectRatio,
-                              height: MediaQuery.of(context).size.width *
-                                  1.5 /
-                                  _controller.value.aspectRatio,
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: Container(
-                                      height: 4,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          border: Border.all(
-                                            width: .5,
-                                            color: Colors.white,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(12)),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        )
+                        // Container(
+                        //   height: MediaQuery.of(context).size.height,
+                        //   width: MediaQuery.of(context).size.width,
+                        //   child: Center(
+                        //     child: Container(
+                        //       width: MediaQuery.of(context).size.width *
+                        //           1.5 /
+                        //           _controller.value.aspectRatio,
+                        //       height: MediaQuery.of(context).size.width *
+                        //           1.5 /
+                        //           _controller.value.aspectRatio,
+                        //       child: Stack(
+                        //         children: [
+                        //           Center(
+                        //             child: Container(
+                        //               height: 4,
+                        //               width: 150,
+                        //               decoration: BoxDecoration(
+                        //                   color: Colors.red,
+                        //                   border: Border.all(
+                        //                     width: .5,
+                        //                     color: Colors.white,
+                        //                   ),
+                        //                   borderRadius:
+                        //                       BorderRadius.circular(12)),
+                        //             ),
+                        //           )
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // )
                       ],
                     );
                   });
@@ -359,8 +329,10 @@ class _SideViewCameraPageState extends State<SideViewCameraPage> {
               }
               await Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) =>
-                      SideViewPreviewPage(imagePath: image.path),
+                  builder: (context) => SideViewPreviewPage(
+                    imagePath: image.path,
+                    distance: res.round(),
+                  ),
                 ),
               );
             } catch (e) {
